@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Now</title>
+    <!-- Tailwind CSS CDN link -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Define a mapping of states to their respective cities
+        const cityData = {
+            "Andhra Pradesh": ["Vijayawada", "Visakhapatnam", "Guntur", "Nellore"],
+            "Karnataka": ["Bangalore", "Mysore", "Mangalore"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
+            "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra"],
+            "Rajasthan": ["Jaipur", "Udaipur", "Jodhpur"],
+            "West Bengal": ["Kolkata", "Howrah", "Siliguri"],
+        };
+
+        // Function to update cities based on selected state
+        function updateCities() {
+            const state = document.getElementById("state").value;
+            const citySelect = document.getElementById("city");
+
+            // Clear existing options
+            citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
+
+            // Check if the state exists in cityData and add cities to the dropdown
+            if (state && cityData[state]) {
+                const cities = cityData[state];
+                cities.forEach(function(city) {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+
+        // Additional custom validation for phone number
+        function validatePhone() {
+            const phoneInput = document.getElementById("phone");
+            const phonePattern = /^[0-9]+$/;
+            if (!phonePattern.test(phoneInput.value)) {
+                alert("Phone number should only contain digits.");
+                return false;
+            }
+            return true;
+        }
+
+        // Additional custom validation for email
+        function validateEmail() {
+            const emailInput = document.getElementById("email");
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            if (!emailPattern.test(emailInput.value)) {
+                alert("Email should be in the format 'example@gmail.com'.");
+                return false;
+            }
+            return true;
+        }
+
+        // Additional custom validation for pincode
+        function validatePincode() {
+            const pincodeInput = document.getElementById("pincode");
+            const pincodePattern = /^[0-9]{6}$/;
+            if (!pincodePattern.test(pincodeInput.value)) {
+                alert("Pincode should be exactly 6 digits.");
+                return false;
+            }
+            return true;
+        }
+
+        // Combine all validations on form submission
+        function validateForm(event) {
+            if (!validatePhone() || !validateEmail() || !validatePincode()) {
+                event.preventDefault();
+            }
+        }
+    </script>
+    <script>
+        function validateForm(event) {
+            let isValid = true; // Track if the form is valid
+    
+            // Validate phone number
+            const phoneInput = document.getElementById("phone");
+            const phoneError = document.getElementById("phone-error");
+            const phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phoneInput.value)) {
+                phoneError.textContent = "Phone number should be exactly 10 digits.";
+                isValid = false;
+            } else {
+                phoneError.textContent = ""; // Clear error if valid
+            }
+    
+            // Validate email
+            const emailInput = document.getElementById("email");
+            const emailError = document.getElementById("email-error");
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            if (!emailPattern.test(emailInput.value)) {
+                emailError.textContent = "Email should be in the format 'example@gmail.com'.";
+                isValid = false;
+            } else {
+                emailError.textContent = "";
+            }
+    
+            // Validate pincode
+            const pincodeInput = document.getElementById("pincode");
+            const pincodeError = document.getElementById("pincode-error");
+            const pincodePattern = /^[0-9]{6}$/;
+            if (!pincodePattern.test(pincodeInput.value)) {
+                pincodeError.textContent = "Pincode should be exactly 6 digits.";
+                isValid = false;
+            } else {
+                pincodeError.textContent = "";
+            }
+    
+            // Validate privacy policy checkbox
+            const privacyCheckbox = document.getElementById("privacy_policy");
+            const privacyError = document.getElementById("privacy-error");
+            if (!privacyCheckbox.checked) {
+                privacyError.textContent = "You must agree to the Privacy Policy.";
+                isValid = false;
+            } else {
+                privacyError.textContent = "";
+            }
+    
+            // Prevent form submission if any validation fails
+            if (!isValid) {
+                event.preventDefault();
+            }
+        }
+    </script>
+    <script>
+        document.getElementById("resume").addEventListener("change", function() {
+            var file = this.files[0];
+            if (file.size > 1048576) { // 5MB = 5242880 bytes
+                alert("The resume file should be less than 5MB.");
+                this.value = ""; // Clear the file input
+            }
+        });
+        </script>
+        
+</head>
+<body class="bg-gray-100 font-sans antialiased flex justify-center items-center min-h-screen p-6">
+
+    <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-semibold text-center text-indigo-600 mb-8">Job Application Form</h1>
+
+        <!-- Display Django messages -->
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="{% if message.tags == 'error' %} bg-red-100 text-red-700 {% else %} bg-green-100 text-green-700 {% endif %} p-4 rounded-md">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" onsubmit="validateForm(event)">
+            {% csrf_token %}
+
+            <!-- Full Name -->
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 font-medium">Full Name:</label>
+                <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required value="{{ form_data.name|default:'' }}">
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-4">
+                <label for="phone" class="block text-gray-700 font-medium">Phone:</label>
+                <input type="text" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required pattern="^[0-9]{10}$" maxlength="10" title="Phone number should be exactly 10 digits." value="{{ form_data.phone|default:'' }}">
+                {% if form.phone.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.phone.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-medium">Email:</label>
+                <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Email should be in the format 'example@gmail.com'." value="{{ form_data.email|default:'' }}">
+                {% if form.email.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Address -->
+            <div class="mb-4">
+                <label for="address" class="block text-gray-700 font-medium">Address:</label>
+                <textarea id="address" name="address" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>{{ form_data.address|default:'' }}</textarea>
+            </div>
+
+            <!-- State -->
+            <div class="mb-4">
+                <label for="state" class="block text-gray-700 font-medium">State:</label>
+                <select id="state" name="state" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required onchange="updateCities()">
+                    <option value="" disabled selected>Select State</option>
+                    <option value="Andhra Pradesh" {% if form_data.state == "Andhra Pradesh" %}selected{% endif %}>Andhra Pradesh</option>
+                    <option value="Karnataka" {% if form_data.state == "Karnataka" %}selected{% endif %}>Karnataka</option>
+                    <option value="Tamil Nadu" {% if form_data.state == "Tamil Nadu" %}selected{% endif %}>Tamil Nadu</option>
+                    <option value="Maharashtra" {% if form_data.state == "Maharashtra" %}selected{% endif %}>Maharashtra</option>
+                    <option value="Uttar Pradesh" {% if form_data.state == "Uttar Pradesh" %}selected{% endif %}>Uttar Pradesh</option>
+                    <option value="Rajasthan" {% if form_data.state == "Rajasthan" %}selected{% endif %}>Rajasthan</option>
+                    <option value="West Bengal" {% if form_data.state == "West Bengal" %}selected{% endif %}>West Bengal</option>
+                </select>
+            </div>
+
+            <!-- City -->
+            <div class="mb-4">
+                <label for="city" class="block text-gray-700 font-medium">City:</label>
+                <select id="city" name="city" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <option value="" disabled selected>Select City</option>
+                    <!-- Cities will be dynamically added here based on selected state -->
+                </select>
+            </div>
+
+            <!-- Pincode -->
+            <div class="mb-4">
+                <label for="pincode" class="block text-gray-700 font-medium">Pincode:</label>
+                <input type="text" id="pincode" name="pincode" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required maxlength="6" pattern="[0-9]{6}" title="Pincode should be exactly 6 digits." value="{{ form_data.pincode|default:'' }}">
+            </div>
+
+            <!-- College -->
+            <div class="mb-4">
+                <label for="college" class="block text-gray-700 font-medium">College:</label>
+                <input type="text" id="college" name="college" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required value="{{ form_data.college|default:'' }}">
+            </div>
+
+            <!-- Qualification -->
+            <div class="mb-4">
+                <label for="qualification" class="block text-gray-700 font-medium">Qualification:</label>
+                <select id="qualification" name="qualification" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <option value="Select Qualification">Select Qualification</option>
+                    <option value="Engineering" {% if form_data.qualification == "Engineering" %}selected{% endif %}>Engineering</option>
+                    <option value="Under Graduate" {% if form_data.qualification == "Under Graduate" %}selected{% endif %}>Under Graduate</option>
+                    <option value="Post Graduate" {% if form_data.qualification == "Post Graduate" %}selected{% endif %}>Post Graduate</option>
+                    <option value="Puc" {% if form_data.qualification == "Puc" %}selected{% endif %}>Puc</option>
+                    <option value="SSLC" {% if form_data.qualification == "SSLC" %}selected{% endif %}>SSLC</option>
+                </select>
+            </div>
+
+            <!-- Job Role -->
+            <div class="mb-4">
+                <label for="jobrole" class="block text-gray-700 font-medium">Job Role:</label>
+                <select id="jobrole" name="jobrole" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <option value="Select Role">Select Role</option>
+                    <option value="Software Developer" {% if form_data.jobrole == "Software Developer" %}selected{% endif %}>Software Developer</option>
+                    <option value="Data Scientist" {% if form_data.jobrole == "Data Scientist" %}selected{% endif %}>Data Scientist</option>
+                    <option value="HR Manager" {% if form_data.jobrole == "HR Manager" %}selected{% endif %}>HR Manager</option>
+                    <option value="Marketing Manager" {% if form_data.jobrole == "Marketing Manager" %}selected{% endif %}>Marketing Manager</option>
+                    <option value="Product Manager" {% if form_data.jobrole == "Product Manager" %}selected{% endif %}>Product Manager</option>
+                    <option value="Graphic Designer" {% if form_data.jobrole == "Graphic Designer" %}selected{% endif %}>Graphic Designer</option>
+                    <option value="UI/UX Designer" {% if form_data.jobrole == "UI/UX Designer" %}selected{% endif %}>UI/UX Designer</option>
+                    <option value="Web Developer" {% if form_data.jobrole == "Web Developer" %}selected{% endif %}>Web Developer</option>
+                    <option value="Business Analyst" {% if form_data.jobrole == "Business Analyst" %}selected{% endif %}>Business Analyst</option>
+                    <option value="Project Manager" {% if form_data.jobrole == "Project Manager" %}selected{% endif %}>Project Manager</option>
+                    <option value="Financial Analyst" {% if form_data.jobrole == "Financial Analyst" %}selected{% endif %}>Financial Analyst</option>
+                    <option value="Operations Manager" {% if form_data.jobrole == "Operations Manager" %}selected{% endif %}>Operations Manager</option>
+                    <option value="Quality Assurance Tester" {% if form_data.jobrole == "Quality Assurance Tester" %}selected{% endif %}>Quality Assurance Tester</option>
+                    <option value="Systems Analyst" {% if form_data.jobrole == "Systems Analyst" %}selected{% endif %}>Systems Analyst</option>
+                    <option value="Network Engineer" {% if form_data.jobrole == "Network Engineer" %}selected{% endif %}>Network Engineer</option>
+                    <option value="Data Engineer" {% if form_data.jobrole == "Data Engineer" %}selected{% endif %}>Data Engineer</option>
+                    <option value="Cybersecurity Specialist" {% if form_data.jobrole == "Cybersecurity Specialist" %}selected{% endif %}>Cybersecurity Specialist</option>
+                    <option value="Sales Manager" {% if form_data.jobrole == "Sales Manager" %}selected{% endif %}>Sales Manager</option>
+                    <option value="Customer Support Specialist" {% if form_data.jobrole == "Customer Support Specialist" %}selected{% endif %}>Customer Support Specialist</option>
+                    <option value="Content Writer" {% if form_data.jobrole == "Content Writer" %}selected{% endif %}>Content Writer</option>
+                    <option value="Internship" {% if form_data.jobrole == "Internship" %}selected{% endif %}>Internship</option>
+                </select>
+            </div>
+
+            <!-- Experience -->
+            <div class="mb-7">
+                <label for="Experience" class="block text-gray-700 font-medium">Experience:</label>
+                <select id="Experience" name="Experience" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <option value="Fresher" {% if form_data.experience == "Fresher" %}selected{% endif %}>Fresher</option>
+                    <option value="Experienced" {% if form_data.experience == "Experienced" %}selected{% endif %}>Experienced</option>
+                </select>
+            </div>
+
+            <!-- Resume -->
+            <div class="mb-6">
+                <label for="resume" class="block text-gray-700 font-medium">Resume:</label>
+                <input type="file" id="resume" name="resume" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+            </div>
+
+            <!-- Privacy Policy -->
+            <div class="mb-6">
+                <input type="checkbox" id="privacy_policy" class="mr-2">
+                <label for="privacy_policy" class="text-gray-700">
+                    I agree to the <a href="/privacy-policy" class="text-indigo-600 underline">Privacy Policy</a>.
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300" onclick="return validatePrivacyPolicy()">Submit</button>
+            
+            <script>
+                function validatePrivacyPolicy() {
+                    const privacyCheckbox = document.getElementById("privacy_policy");
+                    if (!privacyCheckbox.checked) {
+                        alert("Kindly check the privacy policies before submitting.");
+                        return false; // Prevent form submission
+                    }
+                    return true; // Allow form submission
+                }
+            </script>
+        </form>
+    </div>
+</body>
+</html>

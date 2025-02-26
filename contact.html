@@ -1,0 +1,72 @@
+{% include "header.html" %}
+
+<!-- ✅ Contact Information Section -->
+<section class="max-w-6xl mx-auto px-6 py-12">
+    <div class="grid md:grid-cols-3 gap-6 text-center">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold text-gray-800">📍 Our Office</h3>
+            <p class="text-gray-600 mt-2">HSR Layout 3rd sector Bangalore, India</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold text-gray-800">📞 Call Us</h3>
+            <p class="text-gray-600 mt-2">+91 91108 64389</p>
+            <p class="text-gray-600">Mon - Fri, 9:00 AM - 6:00 PM</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold text-gray-800">📧 Email Us</h3>
+            <p class="text-gray-600 mt-2">info@bumblejobs.com</p>
+            <p class="text-gray-600">We’ll respond within 24 hours.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ✅ Contact Form -->
+<section class="max-w-4xl mx-auto px-6 py-12 bg-white rounded-lg shadow-md">
+    <h2 class="text-3xl font-bold text-gray-800 text-center">Send Us a Message</h2>
+    <p class="text-gray-600 text-center mt-2">We’ll get back to you as soon as possible.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label class="text-gray-700 font-semibold">Full Name</label>
+                <input type="text" name="full_name" placeholder="Enter your name" class="w-full mt-2 p-3 border rounded-lg focus:ring focus:ring-blue-300" required>
+            </div>
+            <div>
+                <label class="text-gray-700 font-semibold">Email Address</label>
+                <input type="email" name="email" placeholder="Enter your email" class="w-full mt-2 p-3 border rounded-lg focus:ring focus:ring-blue-300" required>
+            </div>
+        </div>
+        <div class="mt-6">
+            <label class="text-gray-700 font-semibold">Message</label>
+            <textarea name="message" placeholder="Type your message here..." rows="5" class="w-full mt-2 p-3 border rounded-lg focus:ring focus:ring-blue-300" required></textarea>
+        </div>
+        <div class="mt-6 text-center">
+            <button type="submit" class="bg-blue-600 text-white py-3 px-6 rounded-lg font-bold hover:bg-blue-700 transition">Send Message</button>
+        </div>
+    </form>
+</section>
+
+<!-- ✅ Google Map Section -->
+<section class="mt-12 mb-12"> <!-- Added mb-12 for spacing -->
+    <h2 class="text-3xl font-bold text-gray-800 text-center">Find Us on the Map</h2>
+    <p class="text-gray-600 text-center mt-2">Visit our office at the location below.</p>
+    
+    <div class="mt-6 max-w-6xl mx-auto px-6">
+        <iframe 
+            class="w-full h-64 md:h-96 rounded-lg shadow-md" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7777.859157930992!2d77.62692399066674!3d12.912247599590653!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15006b093e7d%3A0x9fe8bf6d1a018e5!2sBumbblejobs%20HR%20Recruitment%20and%20IT%20Solutions!5e0!3m2!1sen!2sin!4v1739949330356!5m2!1sen!2sin" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+    
+</section>
+
+<!-- Add extra space above footer -->
+<div class="mb-12"></div>
+
+{% include "footer.html" %}
+
+</html>

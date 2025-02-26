@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BumbbleJobs - Find Your Dream Job</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Ensure full height on Pixel 7 and other devices */
+    .mobile-menu {
+      height: 100vh; /* Full height */
+      max-width: 280px; /* Keeps width manageable */
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+  <!-- Header / Navigation -->
+  <header class="bg-[#2563EB] shadow">
+    <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+      <div class="text-xl md:text-2xl font-bold text-white">BumbbleJobs</div>
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex space-x-6">
+        <a href="{% url 'home' %}" class="text-white hover:text-[#F59E0B]">Home</a>
+        <a href="{% url 'jobs' %}" class="text-white hover:text-[#F59E0B]">All Jobs</a>
+        <a href="{% url 'about' %}" class="text-white hover:text-[#F59E0B]">About</a>
+        <a href="{% url 'contact_us' %}" class="text-white hover:text-[#F59E0B]">Contact</a>
+      </nav>
+      <!-- Mobile Menu Button -->
+      <button class="block md:hidden text-white text-2xl focus:outline-none" id="menu-btn">
+        ☰
+      </button>
+    </div>
+  </header>
+
+  <!-- Overlay (For Click Outside) -->
+  <div class="fixed inset-0 bg-black bg-opacity-50 hidden z-20" id="menu-overlay"></div>
+
+  <!-- Sidebar Navigation (Mobile) -->
+  <nav class="fixed top-0 right-0 h-screen w-64 max-w-[280px] bg-[#2563EB] shadow-lg transform translate-x-full transition-transform duration-300 z-30 p-6 mobile-menu md:hidden" id="mobile-menu">
+    <button class="text-white text-3xl mb-6 focus:outline-none" id="close-btn">×</button>
+    <ul class="flex flex-col space-y-5 text-lg">
+      <li><a href="{% url 'home' %}" class="text-white hover:text-[#F59E0B]">Home</a></li>
+      <li><a href="{% url 'jobs' %}" class="text-white hover:text-[#F59E0B]">All Jobs</a></li>
+      <li><a href="{% url 'about' %}" class="text-white hover:text-[#F59E0B]">About</a></li>
+      <li><a href="{% url 'contact_us' %}" class="text-white hover:text-[#F59E0B]">Contact</a></li>
+    </ul>
+  </nav>
+
+  <script>
+    // Toggle Sidebar and Overlay
+    const menuBtn = document.getElementById('menu-btn');
+    const closeBtn = document.getElementById('close-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('menu-overlay');
+
+    function toggleMenu() {
+      mobileMenu.classList.toggle('translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+    closeBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+  </script>
+</body>
+</html>

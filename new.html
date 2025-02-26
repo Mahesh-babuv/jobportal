@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Now</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        const cityData = {
+            "Andhra Pradesh": ["Vijayawada", "Visakhapatnam", "Guntur", "Nellore"],
+            "Karnataka": ["Bangalore", "Mysore", "Mangalore"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
+            "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra"],
+            "Rajasthan": ["Jaipur", "Udaipur", "Jodhpur"],
+            "West Bengal": ["Kolkata", "Howrah", "Siliguri"],
+        };
+
+        function updateCities() {
+            const state = document.getElementById("state").value;
+            const citySelect = document.getElementById("city");
+            citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
+            if (state && cityData[state]) {
+                cityData[state].forEach(city => {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-6">
+    <div class="max-w-lg w-full bg-white p-8 rounded-xl shadow-xl">
+        <h1 class="text-3xl font-bold text-center text-indigo-600 mb-6">Job Application</h1>
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %} <!-- Add this line -->
+            <input type="text" placeholder="Full Name" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required>
+            <input type="text" placeholder="Phone" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required pattern="^[0-9]{10}$" maxlength="10">
+            <input type="email" placeholder="Email (example@gmail.com)" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required>
+            <textarea placeholder="Address" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required></textarea>
+            
+            <select id="state" onchange="updateCities()" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required>
+                <option value="" disabled selected>Select State</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="West Bengal">West Bengal</option>
+            </select>
+            
+            <select id="city" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required>
+                <option value="" disabled selected>Select City</option>
+            </select>
+            
+            <input type="text" placeholder="Pincode" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required pattern="[0-9]{6}" maxlength="6">
+            <input type="text" placeholder="College" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required>
+            
+            <select class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required>
+                <option value="">Select Qualification</option>
+                <option>Engineering</option>
+                <option>Under Graduate</option>
+                <option>Post Graduate</option>
+                <option>Puc</option>
+                <option>SSLC</option>
+            </select>
+            
+            <select class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required>
+                <option value="">Select Job Role</option>
+                <option>Software Developer</option>
+                <option>Data Scientist</option>
+                <option>HR Manager</option>
+                <option>Marketing Manager</option>
+                <option>Web Developer</option>
+                <option>Business Analyst</option>
+            </select>
+            
+            <input type="file" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500" required>
+            
+            <a href="/thankyou" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition text-sm">
+         
+                Apply Now
+              </a></form>
+    </div>
+</body>
+</html>
